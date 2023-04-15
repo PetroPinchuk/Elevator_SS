@@ -17,18 +17,17 @@ let arrow = document.querySelector('.arrow');
 let floorsNumber = document.querySelector('.number').childNodes[0];
 let floorsButton = document.querySelector('.renderingFloors');
 
-let currentFloor = 0;
+let currentFloor = 1;
+let isMoving = false;
 let interval;
 let floorCallStack = [];
 
 changeElevHeight();
 
-function changeElevHeight() {
-  elevatorImg.style.height = floorHeight;
-}
 // ----------------------------------------------------------------
 
 function openTheDoor(floor) {
+  floorsNumber.innerText = floor;
   rightDoorImg.style.marginLeft = floorWidth + 'px';
   console.log('openTheDoor');
   arrow.style.backgroundImage = 'url("./img/inactive.png")';
@@ -69,6 +68,7 @@ function arrowAnimation(arrow) {
 // -----------------------------------------------------------
 
 async function moveElevator(floor) {
+  isMoving = true;
   console.log('moveElevator');
     closeTheDoor();
     if (currentFloor > floor) {
@@ -81,14 +81,15 @@ async function moveElevator(floor) {
       }, 1000);
     }
     await timeout(2000);
-    moveUpMoveDown(floor);
 
+    moveUpMoveDown(floor);
     await timeout(2000);
+
     openTheDoor(floor);
-    floorsNumber.innerText = floor;
-    
     await timeout(2000);
-    closeTheDoor();    
+
+    closeTheDoor();
+    isMoving = false;    
 }
 
 // -----------------------------------------------------------
@@ -96,16 +97,18 @@ async function moveElevator(floor) {
 block1.addEventListener('click', function (e) {
   const dataFloorValue = e.target.dataset.floor;
   console.log(dataFloorValue);
+  e.target.classList.add("active");
   floorCallStack.push(+dataFloorValue);
   console.log(floorCallStack);
-  if (dataFloorValue) { // && якшо немає руху ліфта - то не виконувати runElevator
+  if (dataFloorValue && !isMoving) { //якшо немає руху ліфта - то не виконувати runElevator
     runElevator();
   }
 });
 
 async function runElevator() {
   if (!floorCallStack.length) {
-    void(0);
+    moveElevator(1);
+    return;
   } 
   let nextFloor = floorCallStack.shift() // - взяти перший ел з масиву
   await moveElevator(nextFloor); // - передати його ф-ції await moveElevator
@@ -133,6 +136,10 @@ function renderButtons () {
   buttonsTemplate +=  `<button class = 'panBut btn-call-elevator' data-floor='${i}'>${i}</button>`
   };
   document.querySelector('.button-block').innerHTML = buttonsTemplate;
+}
+
+function changeElevHeight() {
+  elevatorImg.style.height = floorHeight;
 }
 
 // --------------------- voice API -------------------------
