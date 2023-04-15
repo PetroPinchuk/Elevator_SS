@@ -1,0 +1,171 @@
+body, html{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+}
+.block1 {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	border: 3px solid black;
+	align-items: flex-end;
+}
+.floors {
+	display: flex;
+	height: 100%;
+}
+.block2{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items:auto;
+}
+.elev-wrap{
+	position: relative;
+	transition: all ease 2s;
+}
+.elevator{
+	display: flex;
+	justify-content: center;
+	transition: all ease 2s;
+	margin-left: 1px;
+	overflow: hidden;
+	position: inherit;
+}
+.door{
+	position: absolute;
+	display: flex;
+}
+#right-door-img{
+  transition: all ease 2s;
+}
+
+.floor {
+	width: 200px;
+	height: auto;
+	border-top: 2px solid;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 1em;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-content: center;
+	background-image: url(../img/brick.jpg);
+	padding: 0 20px;
+}
+.floor > img{
+	height: 1.5em;
+}
+
+.floor > span{
+	font-size: 1.5em;
+}
+.renderingFloors{
+	margin-top: 0;
+	padding-left: 0;
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: start;
+	align-items: auto;
+	align-content: start;
+}
+.btn-call-elevator{
+	flex: 1 0 auto;
+}
+img{
+	cursor: pointer;
+}
+.user-interface{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: auto;
+	align-content: space-around;
+}
+.button-block {
+	display: block;
+	width: 100%;
+	height: auto;
+	align-items: auto;
+	text-align: center;
+}
+.panBut{
+	width: 80px;
+	height: 80px;
+	font-size: 30px;
+	border-radius: 50%;
+	margin: 10px;
+	cursor: pointer;
+}
+.active {
+	border: 2px solid red;
+}
+.display{
+	width: 250px;
+	height: 250px;
+	background-image: url("../img/metal_border.png");
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	flex: 0 0 auto;
+}
+.display-wrap{
+	display: flex;
+	justify-content: center;
+}
+.arrow{
+	background-image: url("../img/inactive.png");
+	width: 65px;
+	height: 65px;
+	flex: 0 0 auto;
+	margin: 3px;
+}
+.number{
+	background-image: url("../img/border_for_number.png");
+	width: 65px;
+	height: 65px;
+	flex: 0 0 auto;
+  margin: 3px;
+}
+.number > h1{
+	text-align: center;
+	font-size: 400%;
+  margin: 0;
+}
+.left-ropes , .right-ropes {
+	width: 0.2em;
+	height: 100%;
+	background-image: url(../img/ropes.jpg);
+	background-repeat: repeat;
+}
+.left-ropes {
+	margin-right: 20px;
+}
+.ropes {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	height:100%;
+	border-top:3px solid;
+}
+
+.floors-count > input{
+	display: flex;
+	width: 50px;
+	height: 50px;
+	font-size: 2em;
+	padding-left: 25px;
+}
+
+.floors-count{
+	text-align: -webkit-center;
+}
