@@ -81,14 +81,16 @@ async function moveElevator(floor) {
       }, 1000);
     }
     await timeout(2000);
-
     moveUpMoveDown(floor);
     await timeout(2000);
-
     openTheDoor(floor);
     await timeout(2000);
-
     closeTheDoor();
+    // document.querySelector(`[data-floor="${floor}"]`).classList.remove("active");
+    const buttons = document.querySelectorAll(`[data-floor="${floor}"]`);
+    buttons.forEach((button) => {
+      button.classList.remove('active');
+    });
     isMoving = false;    
 }
 
@@ -97,7 +99,11 @@ async function moveElevator(floor) {
 block1.addEventListener('click', function (e) {
   const dataFloorValue = e.target.dataset.floor;
   console.log(dataFloorValue);
-  e.target.classList.add("active");
+  const buttons = document.querySelectorAll(`[data-floor="${dataFloorValue}"]`);
+  buttons.forEach((button) => {
+    button.classList.add('active');
+  });
+  // e.target.classList.add("active");
   floorCallStack.push(+dataFloorValue);
   console.log(floorCallStack);
   if (dataFloorValue && !isMoving) { //якшо немає руху ліфта - то не виконувати runElevator
