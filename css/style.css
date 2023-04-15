@@ -58,6 +58,13 @@ body, html{
 }
 .floor > img{
 	height: 1.5em;
+    border-radius: 50%;
+	margin: 2px;
+	border: 2px solid;
+}
+
+.floor.active > img{
+	border: 2px solid red;
 }
 
 .floor > span{

@@ -83,14 +83,11 @@ async function moveElevator(floor) {
     await timeout(2000);
     moveUpMoveDown(floor);
     await timeout(2000);
+    activDisactivBtns(floor, 'remove');
     openTheDoor(floor);
     await timeout(2000);
     closeTheDoor();
-    // document.querySelector(`[data-floor="${floor}"]`).classList.remove("active");
-    const buttons = document.querySelectorAll(`[data-floor="${floor}"]`);
-    buttons.forEach((button) => {
-      button.classList.remove('active');
-    });
+
     isMoving = false;    
 }
 
@@ -99,11 +96,7 @@ async function moveElevator(floor) {
 block1.addEventListener('click', function (e) {
   const dataFloorValue = e.target.dataset.floor;
   console.log(dataFloorValue);
-  const buttons = document.querySelectorAll(`[data-floor="${dataFloorValue}"]`);
-  buttons.forEach((button) => {
-    button.classList.add('active');
-  });
-  // e.target.classList.add("active");
+  activDisactivBtns(dataFloorValue, 'add');
   floorCallStack.push(+dataFloorValue);
   console.log(floorCallStack);
   if (dataFloorValue && !isMoving) { //якшо немає руху ліфта - то не виконувати runElevator
@@ -121,7 +114,16 @@ async function runElevator() {
   runElevator() // - наступний виклик ф-ції не може розпочатись, поки не закінчиться виконання ф-ції moveElevator - знову виконати runElevator
 }
 
-
+function activDisactivBtns(floorNum, action) {
+  const buttons = document.querySelectorAll(`[data-floor="${floorNum}"]`);
+  buttons.forEach((button) => {
+    if (action === 'remove') {
+      button.style.borderColor = "black";
+    }
+    if (action === 'add') {
+      button.style.borderColor = "red";
+  }});
+}
 
 function renderFloors () {
   console.log('renderFloors');
