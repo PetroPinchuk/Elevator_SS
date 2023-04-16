@@ -1,5 +1,5 @@
 const configFloors = {
-  floorsCount : 7,
+  floorsCount : 5,
   language : 'EN',
   sound : 'url....'
 }

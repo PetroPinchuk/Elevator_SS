@@ -1,21 +1,17 @@
 renderButtons();
 renderFloors();
 
-let elevator = document.querySelector('.elevator');
 let elevatorWrap = document.querySelector('.elev-wrap');
 let elevatorImg = document.querySelector('#elevator-img');
-let leftDoorImg = document.querySelector('#left-door-img');
 let rightDoorImg = document.querySelector('#right-door-img');
 let floor = document.getElementById('floor_1');
 let floorHeight = getComputedStyle(floor).height;
 let floorHeightNumber = parseInt(floorHeight);
 let floorWidth = floorHeightNumber / 1.52;
-let buttonFromPanel = document.querySelector('.button-block');
-let btnCallElevator = document.querySelectorAll('.btn-call-elevator');
 let block1 = document.querySelector('.block1');
 let arrow = document.querySelector('.arrow');
 let floorsNumber = document.querySelector('.number').childNodes[0];
-let floorsButton = document.querySelector('.renderingFloors');
+const liftSound = document.getElementById("lift-sound");
 
 let currentFloor = 1;
 let isMoving = false;
@@ -25,19 +21,21 @@ let floorCallStack = [];
 changeElevHeight();
 
 // ----------------------------------------------------------------
-
-function openTheDoor(floor) {
-  floorsNumber.innerText = floor;
-  rightDoorImg.style.marginLeft = floorWidth + 'px';
-  console.log('openTheDoor');
-  arrow.style.backgroundImage = 'url("./img/inactive.png")';
+async function voiceControl(floor) {
   clearInterval(interval);
+  floorsNumber.innerText = floor;
+  floor === 1 
+  ? responsiveVoice.speak(`Выхид с будынку`, "Russian Male")
+  : responsiveVoice.speak(`level ${floor}`, "UK English Male");
+}
+
+function openTheDoor() {
+  rightDoorImg.style.marginLeft = floorWidth + 'px';
+  arrow.style.backgroundImage = 'url("./img/inactive.png")';
 }
 
 function closeTheDoor() {
-  console.log('closeTheDoor');
   rightDoorImg.style.marginLeft = '0';
-  return true;
 }
 
 function timeout(ms) {
@@ -48,7 +46,6 @@ function timeout(ms) {
 function moveUpMoveDown(floorNum) {
   elevatorWrap.style.marginBottom = floorHeightNumber*(floorNum-1) - 1 + 'px';
   currentFloor = floorNum;
-  return floorNum;
 }
 // -----------------------------------------------------------
 function activeDownArrow() {
@@ -63,13 +60,11 @@ function activeBlackArrow() {
 function arrowAnimation(arrow) {
   arrow();
   setTimeout(activeBlackArrow, 250);
-  console.log(currentFloor);
 }
 // -----------------------------------------------------------
 
 async function moveElevator(floor) {
-  isMoving = true;
-  console.log('moveElevator');
+    isMoving = true;
     closeTheDoor();
     if (currentFloor > floor) {
       interval = setInterval(function () {
@@ -82,8 +77,13 @@ async function moveElevator(floor) {
     }
     await timeout(2000);
     moveUpMoveDown(floor);
+    liftSound.play();
     await timeout(2000);
+    await voiceControl(floor);
+    await timeout(2000);
+    responsiveVoice.speak(`Обэрэжно, двэрі відкриваются`, "Russian Male");
     activDisactivBtns(floor, 'remove');
+    await timeout(2000);
     openTheDoor(floor);
     await timeout(2000);
     closeTheDoor();
@@ -95,10 +95,11 @@ async function moveElevator(floor) {
 
 block1.addEventListener('click', function (e) {
   const dataFloorValue = e.target.dataset.floor;
-  console.log(dataFloorValue);
-  activDisactivBtns(dataFloorValue, 'add');
   floorCallStack.push(+dataFloorValue);
+  floorCallStack.sort((a, b) => b - a);
   console.log(floorCallStack);
+  
+  activDisactivBtns(dataFloorValue, 'add');
   if (dataFloorValue && !isMoving) { //якшо немає руху ліфта - то не виконувати runElevator
     runElevator();
   }
@@ -109,9 +110,9 @@ async function runElevator() {
     moveElevator(1);
     return;
   } 
-  let nextFloor = floorCallStack.shift() // - взяти перший ел з масиву
-  await moveElevator(nextFloor); // - передати його ф-ції await moveElevator
-  runElevator() // - наступний виклик ф-ції не може розпочатись, поки не закінчиться виконання ф-ції moveElevator - знову виконати runElevator
+  let nextFloor = floorCallStack.shift();
+  await moveElevator(nextFloor);
+  runElevator();
 }
 
 function activDisactivBtns(floorNum, action) {
@@ -126,7 +127,6 @@ function activDisactivBtns(floorNum, action) {
 }
 
 function renderFloors () {
-  console.log('renderFloors');
   let floorsTemplate = ``;
   for (let i = configFloors.floorsCount; i >= 1 ; i--){
   floorsTemplate +=  `<div id='floor_${i}' class="floor btn-call-elevator">
@@ -138,7 +138,6 @@ function renderFloors () {
 }
 
 function renderButtons () {
-  console.log('renderButtons');
   let buttonsTemplate = ``;
   for (let i = 1; i <= configFloors.floorsCount; i++){
   buttonsTemplate +=  `<button class = 'panBut btn-call-elevator' data-floor='${i}'>${i}</button>`
@@ -149,16 +148,3 @@ function renderButtons () {
 function changeElevHeight() {
   elevatorImg.style.height = floorHeight;
 }
-
-// --------------------- voice API -------------------------
-// function voiceScript() {
-//   let voiceScript = document.createElement('script');
-// voiceScript.setAttribute('src',"https://code.responsivevoice.org/responsivevoice.js?key=" + apiConfig.key);
-// document.head.appendChild(voiceScript);
-//  } 
-
-// responsiveVoice.speak("Обережно Назік", "Ukrainian Female");
-
-
-
-
