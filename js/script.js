@@ -1,6 +1,5 @@
 renderButtons();
 renderFloors();
-
 let elevatorWrap = document.querySelector('.elev-wrap');
 let elevatorImg = document.querySelector('#elevator-img');
 let rightDoorImg = document.querySelector('#right-door-img');
@@ -12,6 +11,7 @@ let block1 = document.querySelector('.block1');
 let arrow = document.querySelector('.arrow');
 let floorsNumber = document.querySelector('.number').childNodes[0];
 const liftSound = document.getElementById("lift-sound");
+const doorSound = document.getElementById("door-sound");
 
 let currentFloor = 1;
 let isMoving = false;
@@ -19,6 +19,7 @@ let interval;
 let floorCallStack = [];
 
 changeElevHeight();
+openTheDoor();
 
 // ----------------------------------------------------------------
 async function voiceControl(floor) {
@@ -30,11 +31,13 @@ async function voiceControl(floor) {
 }
 
 function openTheDoor() {
+  doorSound.play();
   rightDoorImg.style.marginLeft = floorWidth + 'px';
   arrow.style.backgroundImage = 'url("./img/inactive.png")';
 }
 
 function closeTheDoor() {
+  doorSound.play();
   rightDoorImg.style.marginLeft = '0';
 }
 
@@ -65,6 +68,7 @@ function arrowAnimation(arrow) {
 
 async function moveElevator(floor) {
     isMoving = true;
+    await timeout(1000);
     closeTheDoor();
     if (currentFloor > floor) {
       interval = setInterval(function () {
@@ -75,9 +79,10 @@ async function moveElevator(floor) {
         arrowAnimation(activeUpArrow);
       }, 1000);
     }
-    await timeout(2000);
+    await timeout(5000);
     moveUpMoveDown(floor);
     liftSound.play();
+    
     await timeout(2000);
     await voiceControl(floor);
     await timeout(2000);
@@ -85,9 +90,8 @@ async function moveElevator(floor) {
     activDisactivBtns(floor, 'remove');
     await timeout(2000);
     openTheDoor(floor);
-    await timeout(2000);
-    closeTheDoor();
-
+    await timeout(5000);
+     
     isMoving = false;    
 }
 
@@ -148,3 +152,5 @@ function renderButtons () {
 function changeElevHeight() {
   elevatorImg.style.height = floorHeight;
 }
+
+openTheDoor();
