@@ -14,6 +14,7 @@ const liftSound = document.getElementById("lift-sound");
 const doorSound = document.getElementById("door-sound");
 const mechanicalclamp = document.getElementById("mechanicalclamp");
 
+mechanicalclamp.volume = 0.4; 
 let currentFloor = 1;
 let isMoving = false;
 let interval;
@@ -83,9 +84,7 @@ async function moveElevator(floor) {
     await timeout(5000);
     moveUpMoveDown(floor);
     mechanicalclamp.play();
-    // liftSound.play();
-    
-    await timeout(4000);//ddddddddddddddddd
+    await timeout(4000);
     await voiceControl(floor);
     await timeout(2000);
     responsiveVoice.speak(`Обэрэжно, двэрі відкриваются`, "Russian Male");

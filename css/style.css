@@ -29,7 +29,6 @@ body, html{
 .elevator{
 	display: flex;
 	justify-content: center;
-	/* transition: all ease 7s; */
 	margin-left: 1px;
 	overflow: hidden;
 	position: inherit;
