@@ -1,15 +1,15 @@
 renderButtons();
 renderFloors();
-let elevatorWrap = document.querySelector('.elev-wrap');
-let elevatorImg = document.querySelector('#elevator-img');
-let rightDoorImg = document.querySelector('#right-door-img');
-let floor = document.getElementById('floor_1');
-let floorHeight = getComputedStyle(floor).height;
-let floorHeightNumber = parseInt(floorHeight);
-let floorWidth = floorHeightNumber / 1.52;
-let block1 = document.querySelector('.block1');
-let arrow = document.querySelector('.arrow');
-let floorsNumber = document.querySelector('.number').childNodes[0];
+const elevatorWrap = document.querySelector('.elev-wrap');
+const elevatorImg = document.querySelector('#elevator-img');
+const rightDoorImg = document.querySelector('#right-door-img');
+const floor = document.getElementById('floor_1');
+const floorHeight = getComputedStyle(floor).height;
+const floorHeightNumber = parseInt(floorHeight);
+const floorWidth = floorHeightNumber / 1.52;
+const block1 = document.querySelector('.block1');
+const arrow = document.querySelector('.arrow');
+const floorsNumber = document.querySelector('.number').childNodes[0];
 const liftSound = document.getElementById("lift-sound");
 const doorSound = document.getElementById("door-sound");
 const mechanicalclamp = document.getElementById("mechanicalclamp");
@@ -93,19 +93,20 @@ async function moveElevator(floor) {
     openTheDoor(floor);
     await timeout(5000);
      
-    isMoving = false;    
+    isMoving = false;
+        
 }
 
 // -----------------------------------------------------------
 
 block1.addEventListener('click', function (e) {
-  const dataFloorValue = e.target.dataset.floor;
-  floorCallStack.push(+dataFloorValue);
-  floorCallStack.sort((a, b) => b - a);
-  console.log(floorCallStack);
+  const dataFloorValue = +e.target.dataset.floor;
+  dataFloorValue !== 1 ? floorCallStack.push(dataFloorValue) : false;
+  let unicFloorCallStack = Array.from(new Set(floorCallStack));
+  floorCallStack = unicFloorCallStack;
   
   activDisactivBtns(dataFloorValue, 'add');
-  if (dataFloorValue && !isMoving) { //якшо немає руху ліфта - то не виконувати runElevator
+  if (dataFloorValue && !isMoving ) { //якшо немає руху ліфта - то не виконувати runElevator
     runElevator();
   }
 });
@@ -115,6 +116,7 @@ async function runElevator() {
     moveElevator(1);
     return;
   } 
+  floorCallStack.sort((a, b) => b - a);
   let nextFloor = floorCallStack.shift();
   await moveElevator(nextFloor);
   runElevator();
