@@ -12,6 +12,7 @@ let arrow = document.querySelector('.arrow');
 let floorsNumber = document.querySelector('.number').childNodes[0];
 const liftSound = document.getElementById("lift-sound");
 const doorSound = document.getElementById("door-sound");
+const mechanicalclamp = document.getElementById("mechanicalclamp");
 
 let currentFloor = 1;
 let isMoving = false;
@@ -27,7 +28,7 @@ async function voiceControl(floor) {
   floorsNumber.innerText = floor;
   floor === 1 
   ? responsiveVoice.speak(`Выхид с будынку`, "Russian Male")
-  : responsiveVoice.speak(`level ${floor}`, "UK English Male");
+  : responsiveVoice.speak(`Floor ${floor}`, "UK English Male");
 }
 
 function openTheDoor() {
@@ -81,9 +82,10 @@ async function moveElevator(floor) {
     }
     await timeout(5000);
     moveUpMoveDown(floor);
-    liftSound.play();
+    mechanicalclamp.play();
+    // liftSound.play();
     
-    await timeout(2000);
+    await timeout(4000);//ddddddddddddddddd
     await voiceControl(floor);
     await timeout(2000);
     responsiveVoice.speak(`Обэрэжно, двэрі відкриваются`, "Russian Male");
@@ -153,4 +155,7 @@ function changeElevHeight() {
   elevatorImg.style.height = floorHeight;
 }
 
-openTheDoor();
+window.addEventListener('load', (event) => {
+  console.log('The page has fully loaded');
+  openTheDoor();
+});

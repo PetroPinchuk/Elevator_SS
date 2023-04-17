@@ -24,12 +24,12 @@ body, html{
 }
 .elev-wrap{
 	position: relative;
-	transition: all ease 2s;
+	transition: all ease 2.6s;
 }
 .elevator{
 	display: flex;
 	justify-content: center;
-	transition: all ease 2s;
+	/* transition: all ease 7s; */
 	margin-left: 1px;
 	overflow: hidden;
 	position: inherit;
