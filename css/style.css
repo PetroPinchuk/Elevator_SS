@@ -174,3 +174,16 @@ img{
 .floors-count{
 	text-align: -webkit-center;
 }
+
+.floorsCount {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+#floorsCountInput {
+	width: min-content;
+	margin-bottom: 5px;
+}
+#generateFloors {
+	width: min-content;
+}
