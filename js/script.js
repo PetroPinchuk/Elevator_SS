@@ -3,11 +3,12 @@ renderFloors();
 const elevatorWrap = document.querySelector('.elev-wrap');
 const elevatorImg = document.querySelector('#elevator-img');
 const rightDoorImg = document.querySelector('#right-door-img');
+const renderingFloors = document.querySelector('.renderingFloors');
 const floor = document.getElementById('floor_1');
 const floorHeight = getComputedStyle(floor).height;
 const floorHeightNumber = parseInt(floorHeight);
 const floorWidth = floorHeightNumber / 1.52;
-const block1 = document.querySelector('.block1');
+const buttonsBlock = document.querySelector('.button-block');
 const arrow = document.querySelector('.arrow');
 const floorsNumber = document.querySelector('.number').childNodes[0];
 const liftSound = document.getElementById("lift-sound");
@@ -92,14 +93,12 @@ async function moveElevator(floor) {
     await timeout(2000);
     openTheDoor(floor);
     await timeout(5000);
-     
     isMoving = false;
-        
 }
 
 // -----------------------------------------------------------
 
-block1.addEventListener('click', function (e) {
+function activateElevator(e) {
   const dataFloorValue = +e.target.dataset.floor;
   dataFloorValue !== 1 ? floorCallStack.push(dataFloorValue) : false;
   let unicFloorCallStack = Array.from(new Set(floorCallStack));
@@ -109,7 +108,7 @@ block1.addEventListener('click', function (e) {
   if (dataFloorValue && !isMoving ) { //якшо немає руху ліфта - то не виконувати runElevator
     runElevator();
   }
-});
+}
 
 async function runElevator() {
   if (!floorCallStack.length) {
@@ -160,3 +159,6 @@ window.addEventListener('load', (event) => {
   console.log('The page has fully loaded');
   openTheDoor();
 });
+
+buttonsBlock.addEventListener('click', (e) => activateElevator(e));
+renderingFloors.addEventListener('click', (e) => activateElevator(e));
