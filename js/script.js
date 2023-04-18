@@ -1,6 +1,8 @@
 renderButtons();
 renderFloors();
+
 const elevatorWrap = document.querySelector('.elev-wrap');
+const marginTop = elevatorWrap.offsetTop;
 const elevatorImg = document.querySelector('#elevator-img');
 const rightDoorImg = document.querySelector('#right-door-img');
 const renderingFloors = document.querySelector('.renderingFloors');
@@ -18,15 +20,15 @@ const mechanicalclamp = document.getElementById("mechanicalclamp");
 mechanicalclamp.volume = 0.4; 
 let currentFloor = 1;
 let isMoving = false;
-let interval;
+let arrowsInterval;
+let floorsNumberInterval;
 let floorCallStack = [];
 
 changeElevHeight();
 openTheDoor();
 
-// ----------------------------------------------------------------
 async function voiceControl(floor) {
-  clearInterval(interval);
+  clearInterval(arrowsInterval);
   floorsNumber.innerText = floor;
   floor === 1 
   ? responsiveVoice.speak(`Выхид с будынку`, "Russian Male")
@@ -48,12 +50,11 @@ function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// -----------------------------------------------------------
 function moveUpMoveDown(floorNum) {
   elevatorWrap.style.marginBottom = floorHeightNumber*(floorNum-1) - 1 + 'px';
   currentFloor = floorNum;
 }
-// -----------------------------------------------------------
+
 function activeDownArrow() {
   arrow.style.backgroundImage = 'url("./img/active_down.png")';
 }
@@ -67,18 +68,17 @@ function arrowAnimation(arrow) {
   arrow();
   setTimeout(activeBlackArrow, 250);
 }
-// -----------------------------------------------------------
 
 async function moveElevator(floor) {
     isMoving = true;
     await timeout(1000);
     closeTheDoor();
     if (currentFloor > floor) {
-      interval = setInterval(function () {
+      arrowsInterval = setInterval(function () {
         arrowAnimation(activeDownArrow);
       }, 1000);
     } else if (currentFloor < floor) {
-      interval = setInterval(function () {
+      arrowsInterval = setInterval(function () {
         arrowAnimation(activeUpArrow);
       }, 1000);
     }
@@ -86,6 +86,7 @@ async function moveElevator(floor) {
     moveUpMoveDown(floor);
     mechanicalclamp.play();
     await timeout(4000);
+    clearInterval(floorsNumberInterval);
     await voiceControl(floor);
     await timeout(2000);
     responsiveVoice.speak(`Обэрэжно, двэрі відкриваются`, "Russian Male");
@@ -96,8 +97,6 @@ async function moveElevator(floor) {
     isMoving = false;
 }
 
-// -----------------------------------------------------------
-
 function activateElevator(e) {
   const dataFloorValue = +e.target.dataset.floor;
   dataFloorValue !== 1 ? floorCallStack.push(dataFloorValue) : false;
@@ -105,7 +104,7 @@ function activateElevator(e) {
   floorCallStack = unicFloorCallStack;
   
   activDisactivBtns(dataFloorValue, 'add');
-  if (dataFloorValue && !isMoving ) { //якшо немає руху ліфта - то не виконувати runElevator
+  if (dataFloorValue && !isMoving ) {
     runElevator();
   }
 }
@@ -156,9 +155,9 @@ function changeElevHeight() {
 }
 
 window.addEventListener('load', (event) => {
-  console.log('The page has fully loaded');
   openTheDoor();
 });
 
 buttonsBlock.addEventListener('click', (e) => activateElevator(e));
 renderingFloors.addEventListener('click', (e) => activateElevator(e));
+

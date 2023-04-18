@@ -1,7 +1,7 @@
 let floorsCount = localStorage.getItem('floorsCount');
 
 if (floorsCount !== null) {
-  document.querySelector('#floorsCountInput').value = floorsCount;
+  document.querySelector('#floorsCountInput').value = +floorsCount;
 }
 
 document.querySelector('#generateFloors').addEventListener('click', function() {
@@ -12,10 +12,10 @@ document.querySelector('#generateFloors').addEventListener('click', function() {
     return;
   } 
   localStorage.setItem('floorsCount', floorsCount);
-  floorsCount = '';
+  // floorsCount = '';
   location.reload();
 });
 
 const configFloors = {
-  floorsCount : floorsCount,
+  floorsCount : +floorsCount,
 }
